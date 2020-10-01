@@ -3,6 +3,7 @@ package magicfence.healthfiles;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -31,6 +32,7 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef;
     String currentUserID;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         mAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
 
         FullnameET = (EditText) findViewById(R.id.signup_fullname_et);
         PhoneNumET = (EditText) findViewById(R.id.signup_phnum_et);
@@ -67,6 +70,9 @@ public class SignupActivity extends AppCompatActivity {
                     if (!(TextUtils.isEmpty(fullname) && TextUtils.isEmpty(phone_number) && TextUtils.isEmpty(email)
                             && TextUtils.isEmpty(password) && TextUtils.isEmpty(conf_pass)))
                     {
+                        progressDialog.setTitle("Please wait");
+                        progressDialog.setMessage("We are creating your account");
+                        progressDialog.show();
                         usersRef = FirebaseDatabase.getInstance().getReference().child("Patients");
                         mAuth.createUserWithEmailAndPassword(email,password)
                                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -98,6 +104,7 @@ public class SignupActivity extends AppCompatActivity {
                                                             }
                                                             else
                                                             {
+                                                                progressDialog.hide();
                                                                 String msg = task.getException().getMessage();
                                                                 Toast.makeText(SignupActivity.this, msg, Toast.LENGTH_SHORT).show();
                                                             }
@@ -107,6 +114,7 @@ public class SignupActivity extends AppCompatActivity {
                                         }
                                         else
                                         {
+                                            progressDialog.hide();
                                             String err = task.getException().getMessage();
                                             Toast.makeText(SignupActivity.this, err, Toast.LENGTH_SHORT).show();
                                         }
