@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dash_title1"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:columnCount="3"
                 android:layout_marginBottom="40dp"
                 android:padding="12dp"
@@ -57,7 +57,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Option-1"
+                        android:text="Prescriptions"
                         android:textStyle="bold"
                         android:textSize="18sp"
                         />
@@ -76,7 +76,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Option-2"
+                        android:text="Reports"
                         android:textStyle="bold"
                         android:textSize="18sp"
                         />
@@ -95,7 +95,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Option-3"
+                        android:text="My QR"
                         android:textStyle="bold"
                         android:textSize="18sp"
                         />
@@ -114,7 +114,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Option-4"
+                        android:text="Verify Dr."
                         android:textStyle="bold"
                         android:textSize="18sp"
                         />
@@ -133,7 +133,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Option-5"
+                        android:text="Profile"
                         android:textStyle="bold"
                         android:textSize="18sp"
                         />
@@ -152,7 +152,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Option-6"
+                        android:text="Settings"
                         android:textStyle="bold"
                         android:textSize="18sp"
                         />
