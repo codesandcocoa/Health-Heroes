@@ -82,12 +82,40 @@
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
                 />
+            <LinearLayout
+                android:id="@+id/llt1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/signup_conf_pass_et"
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dctr_state_checkbox"
+                    android:layout_marginLeft="40dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="I'm a doctor"
+                    android:padding="5dp"
+                    android:layout_toRightOf="@id/dctr_state_checkbox"
+                    android:textSize="18sp"
+                    />
+                </RelativeLayout>
+            </LinearLayout>
+
+
             <Button
                 android:id="@+id/signup_create_button"
                 android:layout_width="230dp"
                 android:layout_height="50dp"
                 android:text="Create Account"
-                android:layout_below="@id/signup_conf_pass_et"
+                android:layout_below="@id/llt1"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/btn_layout_1"
                 android:backgroundTint="@android:color/holo_red_dark"
