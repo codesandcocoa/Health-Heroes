@@ -21,17 +21,17 @@
         android:layout_marginTop="50dp"
 
         />
+
     <TextView
         android:id="@+id/desc_txt_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/app_title"
-        android:text="A collection of your medical records"
+        android:layout_centerHorizontal="true"
+        android:text="Keeps Log Of Medical Records"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        />
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/signup_button"
