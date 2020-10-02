@@ -1,12 +1,17 @@
 package magicfence.healthfiles;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
@@ -18,12 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
 
 public class VerifyDoctorActivity extends AppCompatActivity {
 
@@ -32,6 +31,10 @@ public class VerifyDoctorActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     DatabaseReference docRef;
     String docID;
+    private static final int RC_PERMISSION = 10;
+    private boolean mPermissionGranted;
+    private int STORAGE_PERMISSION_CODE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +45,13 @@ public class VerifyDoctorActivity extends AppCompatActivity {
 
         codeScannerView = (CodeScannerView) findViewById(R.id.qr_scan_view);
         codeScanner = new CodeScanner(this,codeScannerView);
+        requestPerm();
+
 
         codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+
                         docID = result.getText();
                         docRef.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -70,43 +73,66 @@ public class VerifyDoctorActivity extends AppCompatActivity {
                             }
                         });
 
-                    }
-                });
             }
         });
 
         codeScannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                codeScanner.startPreview();
+                requestPerm();
             }
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        codeScanner.startPreview();
-        requestForCamera();
+    public void requestPerm()
+    {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)==
+                PackageManager.PERMISSION_GRANTED)
+        {
+            codeScanner.startPreview();
+        }
+        else
+        {
+            requestPermission();
+        }
     }
 
-    private void requestForCamera() {
-        Dexter.withActivity(this).withPermission(Manifest.permission.CAMERA)
-                .withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                        codeScanner.startPreview();
-                    }
+    private void requestPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.CAMERA))
+        {
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("We need your permission to access your camera")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                        Toast.makeText(VerifyDoctorActivity.this, "We are not permitted to use your camera", Toast.LENGTH_SHORT).show();
-                    }
+                            ActivityCompat.requestPermissions(VerifyDoctorActivity.this, new String[] {Manifest.permission.CAMERA}, STORAGE_PERMISSION_CODE);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, STORAGE_PERMISSION_CODE);
+        }
+    }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
-                        permissionToken.continuePermissionRequest();
-                    }
-                }).check();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mPermissionGranted = true;
+                codeScanner.startPreview();
+            } else {
+                mPermissionGranted = false;
+            }
+        }
     }
 }
