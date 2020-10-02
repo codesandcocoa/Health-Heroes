@@ -115,6 +115,7 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="28sp"
+                android:padding="5dp"
 
                 />
             <TextView
@@ -123,9 +124,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/users_profile"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
-                android:textSize="20sp"
+                android:layout_marginTop="40dp"
                 android:hint="Height"
+                android:padding="5dp"
+                android:textSize="20sp"
                 />
             <TextView
                 android:id="@+id/users_weight"
@@ -134,8 +136,9 @@
                 android:layout_below="@id/users_height"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
-                android:textSize="20sp"
                 android:hint="Weight"
+                android:padding="5dp"
+                android:textSize="20sp"
                 />
             <TextView
                 android:id="@+id/users_gender"
@@ -146,28 +149,31 @@
                 android:layout_marginTop="30dp"
                 android:textSize="20sp"
                 android:hint="Gender"
+                android:padding="5dp"
                 />
             <TextView
                 android:layout_centerHorizontal="true"
                 android:id="@+id/users_age"
-                android:textSize="20sp"
                 android:layout_width="230dp"
                 android:layout_marginTop="30dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/users_gender"
                 android:hint="Age"
+                android:padding="5dp"
+                android:textSize="20sp"
                 />
             <Button
                 android:id="@+id/editDetail_button"
                 android:layout_width="230dp"
                 android:layout_height="50dp"
-                android:text="Save Changes"
+                android:text="Edit Details"
                 android:layout_below="@id/users_age"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/btn_layout_1"
                 android:backgroundTint="@android:color/holo_red_dark"
                 android:textColor="@android:color/white"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="40dp"
+                android:textSize="18sp"
                 android:layout_marginBottom="30dp"
                 />
 
