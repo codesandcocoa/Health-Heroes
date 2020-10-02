@@ -48,7 +48,14 @@ public class DashboardActivity extends AppCompatActivity {
 
             }
         });
-
+        LinearLayout myProfile = (LinearLayout)findViewById(R.id.ll_my_profile);
+        myProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this,ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         myQrLT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,5 +81,6 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(qrIntent);
             }
         });
+
     }
 }
