@@ -124,8 +124,8 @@
                 android:layout_below="@id/users_profile"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
+                android:textSize="20sp"
                 android:hint="Height"
-                android:text=""
                 />
             <TextView
                 android:id="@+id/users_weight"
@@ -133,9 +133,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/users_height"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
+                android:textSize="20sp"
                 android:hint="Weight"
-                android:text=""
                 />
             <TextView
                 android:id="@+id/users_gender"
@@ -143,24 +143,25 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/users_weight"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
+                android:textSize="20sp"
                 android:hint="Gender"
                 />
             <TextView
                 android:layout_centerHorizontal="true"
                 android:id="@+id/users_age"
+                android:textSize="20sp"
                 android:layout_width="230dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/users_gender"
                 android:hint="Age"
-                android:text=""
                 />
             <Button
                 android:id="@+id/editDetail_button"
                 android:layout_width="230dp"
                 android:layout_height="50dp"
-                android:text="Edit Details"
+                android:text="Save Changes"
                 android:layout_below="@id/users_age"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/btn_layout_1"
