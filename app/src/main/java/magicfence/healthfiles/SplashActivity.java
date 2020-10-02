@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 public class SplashActivity extends AppCompatActivity {
     private static int SPLASH_TIME_OUT=1500;
     FirebaseAuth mAuth;
+    String currentUserID;
     DatabaseReference usersRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
                 usersRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.hasChild(mAuth.getCurrentUser().getUid()))
+                        if (mAuth.getCurrentUser() != null)
                         {
                             Intent homeIntent = new Intent(SplashActivity.this,DashboardActivity.class);
                             startActivity(homeIntent);

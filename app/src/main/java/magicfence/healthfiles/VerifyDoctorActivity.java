@@ -42,7 +42,7 @@ public class VerifyDoctorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_doctor);
         mAuth = FirebaseAuth.getInstance();
-        docRef = FirebaseDatabase.getInstance().getReference().child("Doctors");
+        docRef = FirebaseDatabase.getInstance().getReference();
         role = getIntent().getStringExtra("role");
 
         codeScannerView = (CodeScannerView) findViewById(R.id.qr_scan_view);
@@ -58,20 +58,24 @@ public class VerifyDoctorActivity extends AppCompatActivity {
                         docRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.hasChild(docID))
+                                if (snapshot.exists())
                                 {
-                                    Toast.makeText(VerifyDoctorActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                                    if (role.equals("patient")) {
-                                        Intent profileIntent = new Intent(VerifyDoctorActivity.this, DoctorViewActivity.class);
-                                        profileIntent.putExtra("uid", docID);
-                                        startActivity(profileIntent);
-                                    }
-                                    if(role.equals("doctor"))
-                                    {
-                                        Intent profileIntent = new Intent(VerifyDoctorActivity.this, AddPrescActivity.class);
-                                        profileIntent.putExtra("uid", docID);
-                                        startActivity(profileIntent);
-                                    }
+                                       if (role.equals("patient")) {
+                                           Toast.makeText(VerifyDoctorActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                           Intent profileIntent = new Intent(VerifyDoctorActivity.this, DoctorViewActivity.class);
+                                           profileIntent.putExtra("uid", docID);
+                                           startActivity(profileIntent);
+                                       }
+
+                                        else if (role.equals("doctor"))
+                                        {
+                                            Toast.makeText(VerifyDoctorActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                            Intent profileIntent = new Intent(VerifyDoctorActivity.this, AddPrescActivity.class);
+                                            profileIntent.putExtra("uid", docID);
+                                            startActivity(profileIntent);
+                                        }
+
+
                                 }
                                 else
                                 {
