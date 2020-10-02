@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="magicfence.healthfiles">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.Camera"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.Camera" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VerifyDoctorActivity"></activity>
+        <activity android:name=".DoctorViewActivity"></activity>
+        <activity android:name=".VerifyDoctorActivity" />
         <activity android:name=".MyQRActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".DashboardActivity" />
@@ -25,7 +27,7 @@
         </activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

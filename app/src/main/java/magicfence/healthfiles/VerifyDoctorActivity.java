@@ -2,6 +2,7 @@ package magicfence.healthfiles;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -59,6 +60,9 @@ public class VerifyDoctorActivity extends AppCompatActivity {
                                 if (snapshot.hasChild(docID))
                                 {
                                     Toast.makeText(VerifyDoctorActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                    Intent profileIntent = new Intent(VerifyDoctorActivity.this, DoctorViewActivity.class);
+                                    profileIntent.putExtra("uid",docID);
+                                    startActivity(profileIntent);
                                 }
                                 else
                                 {
