@@ -204,6 +204,30 @@
                         android:textSize="18sp"
                         />
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/add_rep_llt"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:visibility="gone"
+
+                    >
+                    <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:src="@drawable/ic_report"
+                        android:padding="10dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add report"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        />
+                </LinearLayout>
             </GridLayout>
 
         </RelativeLayout>
