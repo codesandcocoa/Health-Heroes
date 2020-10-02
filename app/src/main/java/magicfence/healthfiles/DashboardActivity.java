@@ -81,6 +81,7 @@ public class DashboardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent qrIntent = new Intent(DashboardActivity.this, VerifyDoctorActivity.class);
                 qrIntent.putExtra("role","doctor");
+                qrIntent.putExtra("page","prescription");
                 startActivity(qrIntent);
             }
         });
@@ -88,8 +89,9 @@ public class DashboardActivity extends AppCompatActivity {
         addRepLT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent qrIntent = new Intent(DashboardActivity.this, AddRepActivity.class);
+                Intent qrIntent = new Intent(DashboardActivity.this, VerifyDoctorActivity.class);
                 qrIntent.putExtra("role","doctor");
+                qrIntent.putExtra("page","report");
                 startActivity(qrIntent);
             }
         });

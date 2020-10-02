@@ -70,9 +70,20 @@ public class VerifyDoctorActivity extends AppCompatActivity {
                                         else if (role.equals("doctor"))
                                         {
                                             Toast.makeText(VerifyDoctorActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                                            Intent profileIntent = new Intent(VerifyDoctorActivity.this, AddPrescActivity.class);
-                                            profileIntent.putExtra("uid", docID);
-                                            startActivity(profileIntent);
+
+
+                                            if(getIntent().getStringExtra("page").equals("prescription"))
+                                            {
+                                                Intent profileIntent = new Intent(VerifyDoctorActivity.this, AddPrescActivity.class);
+                                                profileIntent.putExtra("uid", docID);
+                                                startActivity(profileIntent);
+                                            }
+                                            if(getIntent().getStringExtra("page").equals("report"))
+                                            {
+                                                Intent profileIntent = new Intent(VerifyDoctorActivity.this, AddRepActivity.class);
+                                                profileIntent.putExtra("uid", docID);
+                                                startActivity(profileIntent);
+                                            }
                                         }
 
 
