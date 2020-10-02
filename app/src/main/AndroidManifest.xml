@@ -13,12 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DoctorViewActivity"></activity>
+        <activity android:name=".AddPrescActivity"></activity>
+        <activity android:name=".DoctorViewActivity" />
         <activity android:name=".VerifyDoctorActivity" />
         <activity android:name=".MyQRActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".DashboardActivity">
-        </activity>
+        <activity android:name=".DashboardActivity"></activity>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -31,7 +31,7 @@ public class VerifyDoctorActivity extends AppCompatActivity {
     CodeScannerView codeScannerView;
     FirebaseAuth mAuth;
     DatabaseReference docRef;
-    String docID;
+    String docID,role;
     private static final int RC_PERMISSION = 10;
     private boolean mPermissionGranted;
     private int STORAGE_PERMISSION_CODE = 1;
@@ -43,6 +43,7 @@ public class VerifyDoctorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verify_doctor);
         mAuth = FirebaseAuth.getInstance();
         docRef = FirebaseDatabase.getInstance().getReference().child("Doctors");
+        role = getIntent().getStringExtra("role");
 
         codeScannerView = (CodeScannerView) findViewById(R.id.qr_scan_view);
         codeScanner = new CodeScanner(this,codeScannerView);
@@ -60,9 +61,17 @@ public class VerifyDoctorActivity extends AppCompatActivity {
                                 if (snapshot.hasChild(docID))
                                 {
                                     Toast.makeText(VerifyDoctorActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                                    Intent profileIntent = new Intent(VerifyDoctorActivity.this, DoctorViewActivity.class);
-                                    profileIntent.putExtra("uid",docID);
-                                    startActivity(profileIntent);
+                                    if (role.equals("patient")) {
+                                        Intent profileIntent = new Intent(VerifyDoctorActivity.this, DoctorViewActivity.class);
+                                        profileIntent.putExtra("uid", docID);
+                                        startActivity(profileIntent);
+                                    }
+                                    if(role.equals("doctor"))
+                                    {
+                                        Intent profileIntent = new Intent(VerifyDoctorActivity.this, AddPrescActivity.class);
+                                        profileIntent.putExtra("uid", docID);
+                                        startActivity(profileIntent);
+                                    }
                                 }
                                 else
                                 {
