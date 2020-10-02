@@ -17,7 +17,8 @@
         <activity android:name=".VerifyDoctorActivity" />
         <activity android:name=".MyQRActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".DashboardActivity" />
+        <activity android:name=".DashboardActivity">
+        </activity>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
