@@ -23,6 +23,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
     DatabaseReference prescRef;
     FirebaseAuth mAuth;
     String currentUserID;
+    FirebaseRecyclerAdapter firebaseRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +42,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
                         .setQuery(prescRef, Prescriptions.class)
                         .build();
 
-        FirebaseRecyclerAdapter<Prescriptions,PrescriptionsViewHolder> firebaseRecyclerAdapter
-                = new FirebaseRecyclerAdapter<Prescriptions,PrescriptionsViewHolder>(options)
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Prescriptions,PrescriptionsViewHolder>(options)
         {
 
             @NonNull
@@ -66,8 +66,30 @@ public class PrescriptionsActivity extends AppCompatActivity {
         linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.startListening();
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (firebaseRecyclerAdapter != null)
+            firebaseRecyclerAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (firebaseRecyclerAdapter != null)
+            firebaseRecyclerAdapter.stopListening();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (firebaseRecyclerAdapter != null)
+            firebaseRecyclerAdapter.startListening();
     }
 }
 
