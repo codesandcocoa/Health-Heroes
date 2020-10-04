@@ -15,8 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class PrescriptionsActivity extends AppCompatActivity {
 
@@ -25,6 +28,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     String currentUserID,dt,dnamee;
     FirebaseRecyclerAdapter firebaseRecyclerAdapter;
+    TextView msgTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +37,27 @@ public class PrescriptionsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
+        msgTV = (TextView) findViewById(R.id.pmesg1);
+
         prescRef = FirebaseDatabase.getInstance().getReference().child("Patients").child(currentUserID)
                 .child("Prescriptions");
+
+        prescRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists())
+                {
+                   recyclerView.setVisibility(View.GONE);
+                   msgTV.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         recyclerView = (RecyclerView) findViewById(R.id.prescriptions_recycler_view);
 

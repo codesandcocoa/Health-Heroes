@@ -1,14 +1,19 @@
 package magicfence.healthfiles;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -60,15 +65,36 @@ public class PresViewActivity extends AppCompatActivity {
                     bitmap = qrgEncoder.getBitmap();
                     qrView.setImageBitmap(bitmap);
                 }
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
+        DeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               presRef.child(pdate).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                   @Override
+                   public void onComplete(@NonNull Task<Void> task) {
+                       if (task.isSuccessful())
+                       {
+                           Toast.makeText(PresViewActivity.this, "Prescription removed.", Toast.LENGTH_SHORT).show();
+                           Intent pIntent = new Intent(PresViewActivity.this,PrescriptionsActivity.class);
+                           pIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                           startActivity(pIntent);
+                       }
+                       else
+                       {
+                           String msg = task.getException().getMessage();
+                           Toast.makeText(PresViewActivity.this, "Error. " + msg, Toast.LENGTH_SHORT).show();
+                       }
+
+                   }
+               });
+            }
+        });
 
 
     }
