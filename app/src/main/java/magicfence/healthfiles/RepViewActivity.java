@@ -1,13 +1,18 @@
 package magicfence.healthfiles;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,6 +55,25 @@ public class RepViewActivity extends AppCompatActivity {
                 if (snapshot.exists())
                 {
                     desc = snapshot.child("desc").getValue().toString();
+                    rDescTV.setText(desc);
+                    DatabaseReference drRef = FirebaseDatabase.getInstance().getReference().child("Doctors")
+                            .child(snapshot.child("doctor_id").getValue().toString());
+                    drRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists())
+                            {
+                                dr_name = snapshot.child("fullname").getValue().toString();
+                                dNameTv.setText(dr_name);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
 
                 }
 
@@ -58,6 +82,30 @@ public class RepViewActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+        DeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                repRef.child(rkey).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful())
+                        {
+                            Toast.makeText(RepViewActivity.this, "Report deleted successfully", Toast.LENGTH_SHORT).show();
+                            Intent hIntent = new Intent(RepViewActivity.this, ReportsActivity.class);
+                            hIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(hIntent);
+                        }
+                        else
+                        {
+                            String msg = task.getException().getMessage();
+                            Toast.makeText(RepViewActivity.this, "Error. " + msg, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
             }
         });
 

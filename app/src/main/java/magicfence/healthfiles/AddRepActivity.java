@@ -164,39 +164,41 @@ public class AddRepActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
                         {
                             uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                            DatabaseReference reportsRef = FirebaseDatabase.getInstance().getReference()
-                                    .child("Patients").child(patient_id).child("Reports");
 
-
-                            HashMap hashMap = new HashMap();
-                            hashMap.put("title",title);
-                            hashMap.put("desc",desc);
-                            hashMap.put("report",formattedDate);
-                            hashMap.put("doctor_id",currentUserID);
-                            hashMap.put("date",formattedDate);
-
-                            reportsRef.child(title+formattedDate).updateChildren(hashMap)
-                                    .addOnCompleteListener(new OnCompleteListener() {
-                                        @Override
-                                        public void onComplete(@NonNull Task task) {
-                                            if (task.isSuccessful())
-                                            {
-                                                Toast.makeText(AddRepActivity.this, "Sucess", Toast.LENGTH_SHORT).show();
-                                                Intent homeIntent = new Intent(AddRepActivity.this, DashboardActivity.class);
-                                                homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(homeIntent);
-                                            }
-                                            else
-                                            {
-                                                progressDialog.hide();
-                                                String msg = task.getException().getMessage();
-                                                Toast.makeText(AddRepActivity.this, msg, Toast.LENGTH_SHORT).show();
-                                            }
-
-                                        }
-                                    });
                         }
                     });
+
+                    DatabaseReference reportsRef = FirebaseDatabase.getInstance().getReference()
+                            .child("Patients").child(patient_id).child("Reports");
+
+
+                    HashMap hashMap = new HashMap();
+                    hashMap.put("title",title);
+                    hashMap.put("desc",desc);
+                    hashMap.put("report",formattedDate);
+                    hashMap.put("doctor_id",currentUserID);
+                    hashMap.put("date",formattedDate);
+
+                    reportsRef.child(title+formattedDate).updateChildren(hashMap)
+                            .addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if (task.isSuccessful())
+                                    {
+                                        Toast.makeText(AddRepActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                        Intent homeIntent = new Intent(AddRepActivity.this, DashboardActivity.class);
+                                        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(homeIntent);
+                                    }
+                                    else
+                                    {
+                                        progressDialog.hide();
+                                        String msg = task.getException().getMessage();
+                                        Toast.makeText(AddRepActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
 
                 }
             });
