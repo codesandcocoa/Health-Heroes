@@ -1,5 +1,6 @@
 package magicfence.healthfiles;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     DatabaseReference prescRef;
     FirebaseAuth mAuth;
-    String currentUserID;
+    String currentUserID,dt,dnamee;
     FirebaseRecyclerAdapter firebaseRecyclerAdapter;
 
     @Override
@@ -51,13 +52,25 @@ public class PrescriptionsActivity extends AppCompatActivity {
             {
                 View view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.prescription_view_layout,parent,false);
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent presIntent = new Intent(PrescriptionsActivity.this, PresViewActivity.class);
+                        presIntent.putExtra("key",dt);
+                        presIntent.putExtra("dname",dnamee);
+                        startActivity(presIntent);
+                    }
+                });
+
                 return new PrescriptionsViewHolder(view);
             }
 
             @Override
             protected void onBindViewHolder(@NonNull PrescriptionsViewHolder holder, int position, @NonNull Prescriptions model) {
-                holder.setDr_name(model.getDr_name());
-                String dt = getRef(position).getKey().toString();
+                dnamee = model.getDr_name();
+                holder.setDr_name(dnamee);
+                dt = getRef(position).getKey().toString();
                 holder.setDate(dt);
 
             }
