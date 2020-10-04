@@ -1,6 +1,7 @@
 package magicfence.healthfiles;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,12 +21,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
+
 public class RepViewActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     String currentUserID,rtitle,rdate,rkey,link,desc,dr_name;
     TextView dNameTv,rDateTV,rDescTV;
     ImageView qrView;
     Button DeleteButton;
+    Bitmap bitmap;
     DatabaseReference repRef;
 
     @Override
@@ -56,15 +61,18 @@ public class RepViewActivity extends AppCompatActivity {
                 {
                     desc = snapshot.child("desc").getValue().toString();
                     rDescTV.setText(desc);
-                    DatabaseReference drRef = FirebaseDatabase.getInstance().getReference().child("Doctors")
-                            .child(snapshot.child("doctor_id").getValue().toString());
+                    final DatabaseReference drRef = FirebaseDatabase.getInstance().getReference().child("Doctors");
+                    final String did = snapshot.child("doctor_id").getValue().toString();
                     drRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists())
                             {
-                                dr_name = snapshot.child("fullname").getValue().toString();
+                                dr_name = snapshot.child(did).child("fullname").getValue().toString();
                                 dNameTv.setText(dr_name);
+                                QRGEncoder qrgEncoder = new QRGEncoder(did, null, QRGContents.Type.TEXT, 100);
+                                bitmap = qrgEncoder.getBitmap();
+                                qrView.setImageBitmap(bitmap);
                             }
 
                         }
