@@ -1,5 +1,6 @@
 package magicfence.healthfiles;
 
+// IMPORTS
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,10 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,7 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
@@ -37,11 +35,14 @@ public class RepViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rep_view);
+        
+        // Initialising Firebase services
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         repRef = FirebaseDatabase.getInstance().getReference().child("Patients").child(currentUserID).child("Reports");
-
         currentUserID = mAuth.getCurrentUser().getUid();
+        
+        // Getting the report title, report date and unique report key from the Intent
         rtitle = getIntent().getStringExtra("title");
         rdate = getIntent().getStringExtra("date");
         rkey = rtitle + rdate;
@@ -59,8 +60,10 @@ public class RepViewActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists())
                 {
+                    // Getting and setting the report description from the realtime database
                     desc = snapshot.child("desc").getValue().toString();
                     rDescTV.setText(desc);
+                    
                     final DatabaseReference drRef = FirebaseDatabase.getInstance().getReference().child("Doctors");
                     final String did = snapshot.child("doctor_id").getValue().toString();
                     drRef.addValueEventListener(new ValueEventListener() {
@@ -68,8 +71,11 @@ public class RepViewActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists())
                             {
+                                // Getting and rendering the doctor's name 
                                 dr_name = snapshot.child(did).child("fullname").getValue().toString();
                                 dNameTv.setText(dr_name);
+                                
+                                // Generating the QR code for the dotor's profile and rendering
                                 QRGEncoder qrgEncoder = new QRGEncoder(did, null, QRGContents.Type.TEXT, 100);
                                 bitmap = qrgEncoder.getBitmap();
                                 qrView.setImageBitmap(bitmap);
@@ -93,6 +99,7 @@ public class RepViewActivity extends AppCompatActivity {
             }
         });
 
+        // Deleting the reports
         DeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +108,7 @@ public class RepViewActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
                         {
+                            // Toasts when report is deleted and redirects to ReportsActivity
                             Toast.makeText(RepViewActivity.this, "Report deleted successfully", Toast.LENGTH_SHORT).show();
                             Intent hIntent = new Intent(RepViewActivity.this, ReportsActivity.class);
                             hIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -108,6 +116,7 @@ public class RepViewActivity extends AppCompatActivity {
                         }
                         else
                         {
+                            // Toasts the error message
                             String msg = task.getException().getMessage();
                             Toast.makeText(RepViewActivity.this, "Error. " + msg, Toast.LENGTH_SHORT).show();
                         }
