@@ -1,5 +1,6 @@
 package magicfence.healthfiles;
 
+// IMPORTS
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,10 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,7 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
@@ -38,6 +36,8 @@ public class PresViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pres_view);
+        
+        // Initialising Firebase services
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         presRef = FirebaseDatabase.getInstance().getReference().child("Patients").child(currentUserID).child("Prescriptions");
@@ -48,19 +48,26 @@ public class PresViewActivity extends AppCompatActivity {
         DeleteButton = (Button) findViewById(R.id.presc_del_btn);
         qrView = (ImageView) findViewById(R.id.qr_view_pres);
 
+        // Getting prescription date and doctor's name through Intent
         pdate = getIntent().getStringExtra("key");
         dname = getIntent().getStringExtra("dname");
 
+        // Rendering the doctor's name and prescription date
         DnameTv.setText("Dr." + dname);
         DateTv.setText(pdate);
+        
+        // Displaying the prescriptions
         presRef.child(pdate).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists())
                 {
+                    // Getting the prescription details from the realtime database
                     press = snapshot.child("prescriptions").getValue().toString();
                     d_id = snapshot.child("doctor_id").getValue().toString();
                     PresTv.setText(press);
+                    
+                    // Generating a QR code for the doctor's profile and rendering
                     QRGEncoder qrgEncoder = new QRGEncoder(d_id, null, QRGContents.Type.TEXT, 100);
                     bitmap = qrgEncoder.getBitmap();
                     qrView.setImageBitmap(bitmap);
@@ -72,6 +79,7 @@ public class PresViewActivity extends AppCompatActivity {
             }
         });
 
+        // Deleting the prescriptions
         DeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +88,7 @@ public class PresViewActivity extends AppCompatActivity {
                    public void onComplete(@NonNull Task<Void> task) {
                        if (task.isSuccessful())
                        {
+                           // Toasts on deletion
                            Toast.makeText(PresViewActivity.this, "Prescription removed.", Toast.LENGTH_SHORT).show();
                            Intent pIntent = new Intent(PresViewActivity.this,PrescriptionsActivity.class);
                            pIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -87,6 +96,7 @@ public class PresViewActivity extends AppCompatActivity {
                        }
                        else
                        {
+                           // Toasts the error
                            String msg = task.getException().getMessage();
                            Toast.makeText(PresViewActivity.this, "Error. " + msg, Toast.LENGTH_SHORT).show();
                        }
