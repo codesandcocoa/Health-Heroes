@@ -1,5 +1,6 @@
 package magicfence.healthfiles;
 
+// IMPORTS
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,13 +8,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
@@ -41,15 +40,21 @@ public class VerifyDoctorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_doctor);
+        
+        // Initialising Firebase services
         mAuth = FirebaseAuth.getInstance();
         docRef = FirebaseDatabase.getInstance().getReference();
+        
+        // Getting the role of the user from the Intent
         role = getIntent().getStringExtra("role");
 
         codeScannerView = (CodeScannerView) findViewById(R.id.qr_scan_view);
         codeScanner = new CodeScanner(this,codeScannerView);
+        
+        //Requesting camera permissions
         requestPerm();
 
-
+        // Callback on decoding
         codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
@@ -61,6 +66,8 @@ public class VerifyDoctorActivity extends AppCompatActivity {
                                 if (snapshot.exists())
                                 {
                                        if (role.equals("patient")) {
+                                           
+                                           // Redirects to Doctor View Activity
                                            Toast.makeText(VerifyDoctorActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                            Intent profileIntent = new Intent(VerifyDoctorActivity.this, DoctorViewActivity.class);
                                            profileIntent.putExtra("uid", docID);
@@ -71,13 +78,15 @@ public class VerifyDoctorActivity extends AppCompatActivity {
                                         {
                                             Toast.makeText(VerifyDoctorActivity.this, "Success", Toast.LENGTH_SHORT).show();
 
-
+                                            // Redirects to AddPrescActivity
                                             if(getIntent().getStringExtra("page").equals("prescription"))
                                             {
                                                 Intent profileIntent = new Intent(VerifyDoctorActivity.this, AddPrescActivity.class);
                                                 profileIntent.putExtra("uid", docID);
                                                 startActivity(profileIntent);
                                             }
+                                            
+                                            //Redirects to AddRepActivity
                                             if(getIntent().getStringExtra("page").equals("report"))
                                             {
                                                 Intent profileIntent = new Intent(VerifyDoctorActivity.this, AddRepActivity.class);
@@ -90,6 +99,7 @@ public class VerifyDoctorActivity extends AppCompatActivity {
                                 }
                                 else
                                 {
+                                    // Toasts when the doctor's profile is not authorised
                                     Toast.makeText(VerifyDoctorActivity.this, "Not authorized", Toast.LENGTH_SHORT).show();
                                 }
 
@@ -112,6 +122,7 @@ public class VerifyDoctorActivity extends AppCompatActivity {
         });
     }
 
+    //Permission handling
     public void requestPerm()
     {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)==
@@ -125,6 +136,7 @@ public class VerifyDoctorActivity extends AppCompatActivity {
         }
     }
 
+    // Requesting for permission
     private void requestPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.CAMERA))
         {
