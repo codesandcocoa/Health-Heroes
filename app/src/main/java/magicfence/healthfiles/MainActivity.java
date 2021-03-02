@@ -1,12 +1,13 @@
 package magicfence.healthfiles;
 
+// IMPORTS
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,17 +21,22 @@ public class MainActivity extends AppCompatActivity {
         SignupButton = (Button) findViewById(R.id.signup_button);
         LoginButton = (Button) findViewById(R.id.login_button);
 
+        // When signup button is clicked
         SignupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Redirects to signup page
                 Intent signupIntent = new Intent(MainActivity.this, SignupActivity.class);
                 startActivity(signupIntent);
             }
         });
 
+        // When Login button is clicked
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                
+                // Redirects to login page
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
             }
