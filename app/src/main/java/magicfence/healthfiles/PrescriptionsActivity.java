@@ -1,17 +1,16 @@
 package magicfence.healthfiles;
 
+// IMPORTS
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,19 +33,22 @@ public class PrescriptionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prescriptions);
+        
+        // Initialising the Firebase services
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
         msgTV = (TextView) findViewById(R.id.pmesg1);
-
         prescRef = FirebaseDatabase.getInstance().getReference().child("Patients").child(currentUserID)
                 .child("Prescriptions");
 
+        
         prescRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists())
                 {
+                    // Makes the recycler view visible and the empty state message invisible when the prescriptions exist in the patient's account
                    recyclerView.setVisibility(View.GONE);
                    msgTV.setVisibility(View.VISIBLE);
                 }
@@ -66,6 +68,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
                         .setQuery(prescRef, Prescriptions.class)
                         .build();
 
+        // Adapter for holding the prescriptions
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Prescriptions,PrescriptionsViewHolder>(options)
         {
 
@@ -79,6 +82,8 @@ public class PrescriptionsActivity extends AppCompatActivity {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        
+                        // Redirects to PresViewActivity when the user clicks on a prescription
                         Intent presIntent = new Intent(PrescriptionsActivity.this, PresViewActivity.class);
                         presIntent.putExtra("key",dt);
                         presIntent.putExtra("dname",dnamee);
@@ -91,6 +96,8 @@ public class PrescriptionsActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull PrescriptionsViewHolder holder, int position, @NonNull Prescriptions model) {
+                
+                // Fetching the details from the model
                 dnamee = model.getDr_name();
                 holder.setDr_name(dnamee);
                 dt = getRef(position).getKey().toString();
@@ -98,6 +105,8 @@ public class PrescriptionsActivity extends AppCompatActivity {
 
             }
         };
+        
+        // Setting up and binding the adapter with the recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -107,6 +116,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
 
     }
 
+    // Starts listening when the activity starts
     @Override
     protected void onStart() {
         super.onStart();
@@ -114,6 +124,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
             firebaseRecyclerAdapter.startListening();
     }
 
+    // Stops listening when the activity stops
     @Override
     protected void onStop() {
         super.onStop();
@@ -121,6 +132,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
             firebaseRecyclerAdapter.stopListening();
     }
 
+    // Resumes listening when the activity is resumed
     @Override
     protected void onResume() {
         super.onResume();
@@ -129,6 +141,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
     }
 }
 
+// ViewHolder for holding the prescription
 class PrescriptionsViewHolder extends RecyclerView.ViewHolder
 {
     View mView;
@@ -136,11 +149,14 @@ class PrescriptionsViewHolder extends RecyclerView.ViewHolder
         super(itemView);
         mView = itemView;
     }
+    
+    // Setter for Doctor's name
     public void setDr_name(String dr_name) {
-
         TextView tview = mView.findViewById(R.id.presc_view_dname);
         tview.setText(dr_name);
     }
+    
+    // Setter for prescription date
     public void setDate(String date)
     {
         TextView tview = mView.findViewById(R.id.presc_view_date);
