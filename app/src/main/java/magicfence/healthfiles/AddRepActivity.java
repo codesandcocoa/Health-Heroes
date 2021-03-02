@@ -1,5 +1,6 @@
 package magicfence.healthfiles;
 
+// IMPORTS
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,12 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -31,12 +30,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+
 
 public class AddRepActivity extends AppCompatActivity {
 
@@ -44,21 +43,22 @@ public class AddRepActivity extends AppCompatActivity {
     private EditText DescET,TitleET;
     private Button AddButton,SubmitButton;
     private FirebaseAuth mAuth;
-    DatabaseReference patientsRef;
-    String currentUserID,patient_id,formattedDate;
-    Task<Uri> uriTask;
+    private DatabaseReference patientsRef;
+    private String currentUserID,patient_id,formattedDate;
+    private Task<Uri> uriTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_rep);
+        
+        // Initialising Firebase services
         mAuth = FirebaseAuth.getInstance();
+        
         currentUserID = mAuth.getCurrentUser().getUid();
         patientsRef = FirebaseDatabase.getInstance().getReference().child("Patients");
         patient_id = getIntent().getStringExtra("uid");
         fileNameTV = (TextView) findViewById(R.id.file_name_tv);
-
-
         NameTV = (TextView) findViewById(R.id.add_rep_pname);
         DateTV = (TextView) findViewById(R.id.add_rep_pdate);
         TitleET  = (EditText) findViewById(R.id.add_rep_title);
@@ -66,12 +66,15 @@ public class AddRepActivity extends AppCompatActivity {
         AddButton = (Button) findViewById(R.id.upload_doc_button);
         SubmitButton = (Button) findViewById(R.id.upload_report_button);
 
+        // Getting current time
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
 
+        // Getting current date
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
         formattedDate = df.format(c);
 
+        // Rendering the fullname and the formatted current date
         patientsRef.child(patient_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -88,18 +91,22 @@ public class AddRepActivity extends AppCompatActivity {
 
             }
         });
-
+        
+        // Listener when Add Report Button is clicked
         AddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                
                 String desc,title;
                 desc = DescET.getText().toString();
                 title = TitleET.getText().toString();
-
+                
+                // Checking the null state before uploading
                 if (!(TextUtils.isEmpty(desc) && TextUtils.isEmpty(title)))
                 {
                     if(isReadStoragePermissionGranted())
                     {
+                        // Getting the PDF report from the patient using an Intent
                         Intent uploadIntent = new Intent();
                         uploadIntent.setType("application/pdf");
                         uploadIntent.setAction(Intent.ACTION_GET_CONTENT);
@@ -109,6 +116,7 @@ public class AddRepActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    // Toasts when the description field is empty
                     Toast.makeText(AddRepActivity.this, "Please provide some description about the document", Toast.LENGTH_SHORT).show();
                 }
 
@@ -116,7 +124,7 @@ public class AddRepActivity extends AppCompatActivity {
         });
     }
 
-
+    // Checking Storage access permissions
     public  boolean isReadStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -127,7 +135,8 @@ public class AddRepActivity extends AppCompatActivity {
                 return false;
             }
         }
-        else { //permission is automatically granted on sdk<23 upon installation
+        else { 
+            // Permission is automatically granted on sdk<23 upon installation
             return true;
         }
     }
@@ -142,6 +151,7 @@ public class AddRepActivity extends AppCompatActivity {
             fileNameTV.setText(data.getDataString()
             .substring(data.getDataString().lastIndexOf("/") + 1));
 
+            // Submit button is made VISIBLE after satisfying the base conditions
             SubmitButton.setVisibility(View.VISIBLE);
 
             SubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +164,8 @@ public class AddRepActivity extends AppCompatActivity {
 
                     final String desc = DescET.getText().toString();
                     final String title = TitleET.getText().toString();
-
+                    
+                    // Stores the collected document in the Firebase Cloud Storage
                     StorageReference docRef = FirebaseStorage.getInstance().getReference()
                             .child("Reports").child(patient_id).child(title + formattedDate + ".pdf");
 
@@ -163,6 +174,7 @@ public class AddRepActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
                         {
+                            // Getting the download URL of the document for reference
                             uriTask = taskSnapshot.getStorage().getDownloadUrl();
 
                         }
@@ -171,7 +183,7 @@ public class AddRepActivity extends AppCompatActivity {
                     DatabaseReference reportsRef = FirebaseDatabase.getInstance().getReference()
                             .child("Patients").child(patient_id).child("Reports");
 
-
+                    // Storing the report details in the realtime database
                     HashMap hashMap = new HashMap();
                     hashMap.put("title",title);
                     hashMap.put("desc",desc);
@@ -179,12 +191,14 @@ public class AddRepActivity extends AppCompatActivity {
                     hashMap.put("doctor_id",currentUserID);
                     hashMap.put("date",formattedDate);
 
+                    // Generating a unique ID by combining title and datetime for the report to act as a unique child in database
                     reportsRef.child(title+formattedDate).updateChildren(hashMap)
                             .addOnCompleteListener(new OnCompleteListener() {
                                 @Override
                                 public void onComplete(@NonNull Task task) {
                                     if (task.isSuccessful())
                                     {
+                                        // On success, redirects to Dashboard Activity
                                         Toast.makeText(AddRepActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                         Intent homeIntent = new Intent(AddRepActivity.this, DashboardActivity.class);
                                         homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -192,6 +206,7 @@ public class AddRepActivity extends AppCompatActivity {
                                     }
                                     else
                                     {
+                                        // Toasts the error
                                         progressDialog.hide();
                                         String msg = task.getException().getMessage();
                                         Toast.makeText(AddRepActivity.this, msg, Toast.LENGTH_SHORT).show();
