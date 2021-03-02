@@ -1,4 +1,4 @@
-package magicfence.healthfiles;
+package magicfence.healthfiles.Activity;
 
 // IMPORTS
 import android.content.Intent;
@@ -20,6 +20,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import magicfence.healthfiles.Model.Prescriptions;
+import magicfence.healthfiles.R;
+import magicfence.healthfiles.Viewholder.PrescriptionsViewHolder;
+
 public class PrescriptionsActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -28,7 +32,6 @@ public class PrescriptionsActivity extends AppCompatActivity {
     String currentUserID,dt,dnamee;
     FirebaseRecyclerAdapter firebaseRecyclerAdapter;
     TextView msgTV;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +72,7 @@ public class PrescriptionsActivity extends AppCompatActivity {
                         .build();
 
         // Adapter for holding the prescriptions
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Prescriptions,PrescriptionsViewHolder>(options)
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Prescriptions, PrescriptionsViewHolder>(options)
         {
 
             @NonNull
@@ -141,25 +144,3 @@ public class PrescriptionsActivity extends AppCompatActivity {
     }
 }
 
-// ViewHolder for holding the prescription
-class PrescriptionsViewHolder extends RecyclerView.ViewHolder
-{
-    View mView;
-    public PrescriptionsViewHolder(@NonNull View itemView) {
-        super(itemView);
-        mView = itemView;
-    }
-    
-    // Setter for Doctor's name
-    public void setDr_name(String dr_name) {
-        TextView tview = mView.findViewById(R.id.presc_view_dname);
-        tview.setText(dr_name);
-    }
-    
-    // Setter for prescription date
-    public void setDate(String date)
-    {
-        TextView tview = mView.findViewById(R.id.presc_view_date);
-        tview.setText(date);
-    }
-}

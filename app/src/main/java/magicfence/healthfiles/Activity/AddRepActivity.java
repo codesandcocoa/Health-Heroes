@@ -1,4 +1,4 @@
-package magicfence.healthfiles;
+package magicfence.healthfiles.Activity;
 
 // IMPORTS
 import android.Manifest;
@@ -35,6 +35,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+
+import magicfence.healthfiles.R;
 
 
 public class AddRepActivity extends AppCompatActivity {

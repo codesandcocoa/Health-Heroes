@@ -1,4 +1,4 @@
-package magicfence.healthfiles;
+package magicfence.healthfiles.Activity;
 
 // IMPORTS
 import android.app.ProgressDialog;
@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import magicfence.healthfiles.R;
 
 
 public class AddPrescActivity extends AppCompatActivity {

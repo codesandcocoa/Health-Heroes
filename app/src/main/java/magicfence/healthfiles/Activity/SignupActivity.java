@@ -1,4 +1,4 @@
-package magicfence.healthfiles;
+package magicfence.healthfiles.Activity;
 
 // IMPORTS
 import androidx.annotation.NonNull;
@@ -18,8 +18,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import org.w3c.dom.Text;
+
 import java.util.HashMap;
+
+import magicfence.healthfiles.R;
 
 public class SignupActivity extends AppCompatActivity {
 

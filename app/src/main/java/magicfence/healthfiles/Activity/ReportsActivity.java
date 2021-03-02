@@ -1,4 +1,4 @@
-package magicfence.healthfiles;
+package magicfence.healthfiles.Activity;
 
 // IMPORTS
 import android.content.Intent;
@@ -19,6 +19,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import magicfence.healthfiles.Model.Reports;
+import magicfence.healthfiles.R;
+import magicfence.healthfiles.Viewholder.ReportsViewHolder;
 
 public class ReportsActivity extends AppCompatActivity {
 
@@ -65,7 +69,7 @@ public class ReportsActivity extends AppCompatActivity {
                         .build();
 
         // Adapter for holding the reports
-        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Reports,ReportsViewHolder>(options)
+        firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Reports, ReportsViewHolder>(options)
                 {
                     @NonNull
                     @Override
@@ -78,7 +82,7 @@ public class ReportsActivity extends AppCompatActivity {
                             public void onClick(View v) {
                                 
                                 // Redirects to RepViewActivity if the user clicks on the report
-                               Intent repIntent = new Intent(ReportsActivity.this,RepViewActivity.class);
+                               Intent repIntent = new Intent(ReportsActivity.this, RepViewActivity.class);
                                repIntent.putExtra("title",rptitle);
                                repIntent.putExtra("date",rpdate);
                                startActivity(repIntent);
@@ -131,25 +135,3 @@ public class ReportsActivity extends AppCompatActivity {
     }
 }
 
-// ViewHolder for holding the Reports
-class ReportsViewHolder extends RecyclerView.ViewHolder
-{
-    View mView;
-    public ReportsViewHolder(@NonNull View itemView) {
-        super(itemView);
-        mView = itemView;
-    }
-
-    // Setter for title
-    public void setTitle(String title) {
-        TextView textView = mView.findViewById(R.id.rep_view_title);
-        textView.setText(title);
-    }
-    
-    //Setter for date
-    public void setDate(String date) {
-        TextView textView = mView.findViewById(R.id.rep_view_date);
-        textView.setText(date);
-    }
-
-}

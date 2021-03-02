@@ -1,4 +1,4 @@
-package magicfence.healthfiles;
+package magicfence.healthfiles.Model;
 
 // Model class for fetching the Prescriptions
 

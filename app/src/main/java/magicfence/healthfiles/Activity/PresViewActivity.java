@@ -1,4 +1,4 @@
-package magicfence.healthfiles;
+package magicfence.healthfiles.Activity;
 
 // IMPORTS
 import android.content.Intent;
@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import magicfence.healthfiles.R;
 
 public class PresViewActivity extends AppCompatActivity {
 
@@ -90,7 +91,7 @@ public class PresViewActivity extends AppCompatActivity {
                        {
                            // Toasts on deletion
                            Toast.makeText(PresViewActivity.this, "Prescription removed.", Toast.LENGTH_SHORT).show();
-                           Intent pIntent = new Intent(PresViewActivity.this,PrescriptionsActivity.class);
+                           Intent pIntent = new Intent(PresViewActivity.this, PrescriptionsActivity.class);
                            pIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                            startActivity(pIntent);
                        }

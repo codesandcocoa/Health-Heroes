@@ -14,28 +14,28 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RepViewActivity"></activity>
-        <activity android:name=".PresViewActivity" />
-        <activity android:name=".ReportsActivity" />
-        <activity android:name=".PrescriptionsActivity" />
-        <activity android:name=".AddRepActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".AddPrescActivity" />
-        <activity android:name=".DoctorViewActivity" />
-        <activity android:name=".VerifyDoctorActivity" />
-        <activity android:name=".MyQRActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".DashboardActivity" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".Activity.RepViewActivity"></activity>
+        <activity android:name=".Activity.PresViewActivity" />
+        <activity android:name=".Activity.ReportsActivity" />
+        <activity android:name=".Activity.PrescriptionsActivity" />
+        <activity android:name=".Activity.AddRepActivity" />
+        <activity android:name=".Activity.SettingsActivity" />
+        <activity android:name=".Activity.AddPrescActivity" />
+        <activity android:name=".Activity.DoctorViewActivity" />
+        <activity android:name=".Activity.VerifyDoctorActivity" />
+        <activity android:name=".Activity.MyQRActivity" />
+        <activity android:name=".Activity.ProfileActivity" />
+        <activity android:name=".Activity.DashboardActivity" />
+        <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignupActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.SignupActivity" />
+        <activity android:name=".Activity.MainActivity" />
     </application>
 
 </manifest>

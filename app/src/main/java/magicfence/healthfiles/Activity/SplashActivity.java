@@ -1,4 +1,4 @@
-package magicfence.healthfiles;
+package magicfence.healthfiles.Activity;
 
 // IMPORTS
 import android.content.Intent;
@@ -13,10 +13,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import magicfence.healthfiles.R;
+
 public class SplashActivity extends AppCompatActivity {
     
     // Splash timeout set to 1500
-    private static int SPLASH_TIME_OUT=1500;
+    private static int SPLASH_TIME_OUT=5;
     
     FirebaseAuth mAuth;
     String currentUserID;
@@ -41,14 +43,14 @@ public class SplashActivity extends AppCompatActivity {
                         if (mAuth.getCurrentUser() != null)
                         {
                             // Redirects to Dashboard Activity
-                            Intent homeIntent = new Intent(SplashActivity.this,DashboardActivity.class);
+                            Intent homeIntent = new Intent(SplashActivity.this, DashboardActivity.class);
                             startActivity(homeIntent);
                             finish();
                         }
                         else
                         {
                             // Redirects to MainActivity
-                            Intent homeIntent = new Intent(SplashActivity.this,MainActivity.class);
+                            Intent homeIntent = new Intent(SplashActivity.this, MainActivity.class);
                             startActivity(homeIntent);
                             finish();
                         }

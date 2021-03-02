@@ -1,4 +1,4 @@
-package magicfence.healthfiles;
+package magicfence.healthfiles.Activity;
 
 // IMPORTS
 import android.content.Intent;
@@ -13,6 +13,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import magicfence.healthfiles.R;
 
 public class DashboardActivity extends AppCompatActivity {
     
@@ -62,7 +64,7 @@ public class DashboardActivity extends AppCompatActivity {
         myProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DashboardActivity.this,ProfileActivity.class);
+                Intent intent = new Intent(DashboardActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });
