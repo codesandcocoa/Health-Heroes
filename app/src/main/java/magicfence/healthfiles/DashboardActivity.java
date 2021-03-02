@@ -1,13 +1,12 @@
 package magicfence.healthfiles;
 
+// IMPORTS
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,18 +15,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class DashboardActivity extends AppCompatActivity {
-    private LinearLayout myQrLT,verifyLT,addPrescLT,settingsLT,addRepLT,prescLLT,reportsLLT;
+    
+    private LinearLayout myQrLT, verifyLT, addPrescLT, settingsLT, addRepLT, prescLLT, reportsLLT, myProfile;
     private DatabaseReference docRef;
     private FirebaseAuth mAuth;
-    String currentUserID;
-
+    private String currentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        
+        // Initialising Firebase services
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
+        
         myQrLT = (LinearLayout) findViewById(R.id.llt_myqr);
         verifyLT = (LinearLayout) findViewById(R.id.verify_dr_llt);
         addPrescLT = (LinearLayout) findViewById(R.id.add_presc_llt);
@@ -35,8 +37,10 @@ public class DashboardActivity extends AppCompatActivity {
         prescLLT = (LinearLayout) findViewById(R.id.prescs_llt);
         addRepLT = (LinearLayout) findViewById(R.id.add_rep_llt);
         reportsLLT = (LinearLayout) findViewById(R.id.reports_llt);
+        myProfile = (LinearLayout)findViewById(R.id.ll_my_profile);
         docRef = FirebaseDatabase.getInstance().getReference().child("Doctors");
 
+        // Displays the Add prescription and Add report sections only if the user is a DOCTOR
         docRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -52,8 +56,9 @@ public class DashboardActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
-        LinearLayout myProfile = (LinearLayout)findViewById(R.id.ll_my_profile);
+        }); 
+        
+        // Redirects to Profile Activity on click
         myProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +66,8 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        
+        // Redirects to My QR activity on click
         myQrLT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +76,7 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
+        // Redirects to Verify doctor Activity on click
         verifyLT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,25 +86,29 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
+        // Redirects to Add Prescriptions Activity on click
         addPrescLT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent qrIntent = new Intent(DashboardActivity.this, VerifyDoctorActivity.class);
+                Intent qrIntent = new Intent(DashboardActivity.this, AddPrescActivity.class);
                 qrIntent.putExtra("role","doctor");
                 qrIntent.putExtra("page","prescription");
                 startActivity(qrIntent);
             }
         });
 
+        // Redirects to Add Report Activity on click
         addRepLT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent qrIntent = new Intent(DashboardActivity.this, VerifyDoctorActivity.class);
+                Intent qrIntent = new Intent(DashboardActivity.this, AddRepActivity.class);
                 qrIntent.putExtra("role","doctor");
                 qrIntent.putExtra("page","report");
                 startActivity(qrIntent);
             }
         });
+        
+        // Redirects to Settings Activity on click
         settingsLT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +116,8 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(settingsIntent);
             }
         });
+        
+        // Redirects to Prescriptions Activity on click
         prescLLT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +125,8 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(pIntent);
             }
         });
+        
+        // Redirects to Reports Activity on click
         reportsLLT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
