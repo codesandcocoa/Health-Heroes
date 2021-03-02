@@ -1,17 +1,16 @@
 package magicfence.healthfiles;
 
+// IMPORTS
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +29,12 @@ public class ReportsActivity extends AppCompatActivity {
     String currentUserID,rptitle,rpdate;
     DatabaseReference repRef;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports);
+        
+        // Initialising the Firebase services
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
 
@@ -47,6 +47,7 @@ public class ReportsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists())
                 {
+                    // Hides the recycler view if thee are no reports and displays the empty message
                     recyclerView.setVisibility(View.GONE);
                     msgTv.setVisibility(View.VISIBLE);
                 }
@@ -63,6 +64,7 @@ public class ReportsActivity extends AppCompatActivity {
                         .setQuery(repRef, Reports.class)
                         .build();
 
+        // Adapter for holding the reports
         firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Reports,ReportsViewHolder>(options)
                 {
                     @NonNull
@@ -74,6 +76,8 @@ public class ReportsActivity extends AppCompatActivity {
                         view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                
+                                // Redirects to RepViewActivity if the user clicks on the report
                                Intent repIntent = new Intent(ReportsActivity.this,RepViewActivity.class);
                                repIntent.putExtra("title",rptitle);
                                repIntent.putExtra("date",rpdate);
@@ -86,12 +90,16 @@ public class ReportsActivity extends AppCompatActivity {
 
                     @Override
                     protected void onBindViewHolder(@NonNull ReportsViewHolder holder, int position, @NonNull Reports model) {
+                        
+                        // Fetching the report title and date
                         rptitle = model.getTitle();
                         rpdate = model.getDate();
                         holder.setTitle(rptitle);
                         holder.setDate(rpdate);
                     }
                 };
+        
+        // Setting and binding the adapter with the recycler view
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
@@ -101,24 +109,29 @@ public class ReportsActivity extends AppCompatActivity {
 
     }
 
+    // Starts listening when Activity starts
     @Override
     protected void onStart() {
         super.onStart();
         firebaseRecyclerAdapter.startListening();
     }
 
+    // Stops listening when the Activity stops
     @Override
     protected void onStop() {
         super.onStop();
         firebaseRecyclerAdapter.stopListening();
     }
 
+    // Starts listening when the Activity resumes
     @Override
     protected void onResume() {
         super.onResume();
         firebaseRecyclerAdapter.startListening();
     }
 }
+
+// ViewHolder for holding the Reports
 class ReportsViewHolder extends RecyclerView.ViewHolder
 {
     View mView;
@@ -127,10 +140,13 @@ class ReportsViewHolder extends RecyclerView.ViewHolder
         mView = itemView;
     }
 
+    // Setter for title
     public void setTitle(String title) {
         TextView textView = mView.findViewById(R.id.rep_view_title);
         textView.setText(title);
     }
+    
+    //Setter for date
     public void setDate(String date) {
         TextView textView = mView.findViewById(R.id.rep_view_date);
         textView.setText(date);
