@@ -1,9 +1,9 @@
 package magicfence.healthfiles;
 
+// IMPORTS
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +12,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class ProfileActivity extends AppCompatActivity {
+    
     userProfileDetails user;
     private EditText weightEdit, heightEdit, genderEdit, ageEdit;
     private TextView weightT, heightT,genderT,ageT;
@@ -30,6 +30,8 @@ public class ProfileActivity extends AppCompatActivity {
     private int i =0;
     private RelativeLayout saveCardView,editCardView;
     private FirebaseAuth mAuth;
+    
+    // Initialising the Firebase services
     String currentUserID = FirebaseAuth.getInstance().getUid();
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Patients/"+currentUserID+"/ProfileDetails");
 
@@ -38,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         retreiveUserDetails(mDatabase);
         setContentView(R.layout.activity_profile);
+        
         heightT = (TextView)findViewById(R.id.users_height);
         weightT = (TextView)findViewById(R.id.users_weight);
         ageT = (TextView)findViewById(R.id.users_age);
@@ -51,9 +54,12 @@ public class ProfileActivity extends AppCompatActivity {
         saveCardView = (RelativeLayout) findViewById(R.id.save_cardView);
         editCardView = (RelativeLayout) findViewById(R.id.edit_cardView);
 
+        // Saving the user details
         SaveDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                
+                // Getting and setting weight, height, gender and age of the user
                 final String weight,height,gender,age;
                 weight = weightEdit.getText().toString();
                 height = heightEdit.getText().toString();
@@ -70,17 +76,22 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+        
         editDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                
+                // Displays the edit card and save card when Edit Details button is clicked
                 editCardView.setVisibility(View.GONE);
                 saveCardView.setVisibility(View.VISIBLE);
 
             }
         });
     }
-    public class userProfileDetails{
-        public String weight,height,gender,age;
+    
+    // Class for holding the user profile details
+    public class userProfileDetails {
+        public String weight, height, gender, age;
         public userProfileDetails() {
             // Default constructor required for calls to DataSnapshot.getValue(User.class)
         }
@@ -90,9 +101,9 @@ public class ProfileActivity extends AppCompatActivity {
             this.age = age;
             this.gender=gender;
         }
-
-
     }
+    
+    // Retrieving the user details
     public void retreiveUserDetails(DatabaseReference mDatabase){
         i=0;
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -100,17 +111,21 @@ public class ProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot snapshots : snapshot.getChildren()){
                     if(i==0){
+                        // Gets and sets the age
                         ageT.setText(snapshots.getValue(String.class));
                     }
                     else if(i==1){
+                        // Gets and sets the gender
                         genderT.setText(snapshots.getValue(String.class));
 
                     }
                     else if(i==2){
+                        // Gets and sets the height
                         heightT.setText(snapshots.getValue(String.class));
 
                     }
                     else if(i==3){
+                        // Gets and sets the weight
                         weightT.setText(snapshots.getValue(String.class));
                     }
                     i++;
