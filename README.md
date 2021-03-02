@@ -46,11 +46,11 @@
 ![image](https://user-images.githubusercontent.com/53183532/95006766-5edc8900-0625-11eb-9538-eabe49b9457a.png)
 <h3> Heroes On Board </h3>
 <ul>
+  <li>Sanjay Thiyagarajan</li>
   <li>Navneet Kumar Singh</li>
   <li>Giwansh Aryan</li>
   <li>Mainak Deb</li>
   <li>Rishab Mudliar</li>
-  <li>Sanjay Thiyagarajan</li>
 </ul>
 
 
